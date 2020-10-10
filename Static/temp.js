@@ -38,6 +38,18 @@ function createMap(dinning, houses) {
       accessToken: API_KEY
     });
 
+// Create the map object with options
+var map = L.map("map-id", {
+  center: [33.7756, -84.3963],
+  zoom: 12,
+  layers: [lightmap, dinning, houses]
+});
+    // Initialize all of the LayerGroups we'll be using
+var layers = {
+  dinning_layer: new L.LayerGroup(),
+  houses_layer: new L.LayerGroup()
+};
+
   // Create a baseMaps object to hold the lightmap layer
   var baseMaps = {
     "Light Map": lightmap,
@@ -48,13 +60,6 @@ function createMap(dinning, houses) {
     "Restaurants": dinning,
     "For Sale":houses
   };
-
-  // Create the map object with options
-  var map = L.map("map-id", {
-    center: [33.7756, -84.3963],
-    zoom: 12,
-    layers: [lightmap, dinning]
-  });
 
   // Adding a tile layer (the background map image) to our map
   // We use the addTo method to add objects to our map
@@ -77,7 +82,14 @@ function createMap(dinning, houses) {
       collapsed: false
     }).addTo(map);
 }
-
+var icons = {
+  dinning_icon: L.ExtraMarkers.icon({
+    icon: "restaurant",
+    iconColor: "white",
+    markerColor: "blue-dark",
+    shape: "circle"
+  })
+};
 function createMarkers(response) {
   // Pull the "stations" property off of response.data
 
@@ -91,13 +103,16 @@ function createMarkers(response) {
     var res = restaurants[index];
 
     //  For each station, create a marker and bind a popup with the station's name
-    var restMarker = L.marker([res.geometry.coordinates[1],res.geometry.coordinates[0]])
-    .bindPopup("<h3>" + res.properties.name + "<h3><h3>Capacity: " + res.properties.cuisine + "</h3>");
+    var newMarker = L.marker([res.geometry.coordinates[1],res.geometry.coordinates[0]],{
+      icon: icons.dinning_icon
+    });
+
+      newMarker.bindPopup("<h3>" + res.properties.name + "<h3><h3>Capacity: " + res.properties.cuisine + "</h3>");
 
     // Add the marker to the bikeMarkers array
-    restMarkers.push(restMarker);
+    restMarkers.push(newMarker);
   }
-  console.log(restMarkers);
+  // console.log(restMarkers);
 
 
 // Create a layer group made from the bike markers array, pass it into the createMap function

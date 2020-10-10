@@ -1,4 +1,33 @@
-function createMap(dinning) {
+      var for_sale = [{
+        location: [33.773, -84.352],
+        name: "House 01: Virgina Highlands",
+        price: "$4M"
+      },
+      {
+        location: [33.779, -84.380],
+        name: "House 02: Midtown",
+        price: "$4M"
+      },
+      {
+        location: [33.8402, -84.232],
+        name: "House 03: Tucker",
+        price: "2,296,224"
+      },
+      {
+        location: [33.765, -84.354],
+        name: "House 04: Inman Park",
+        price: "3,971,883"
+      }];
+
+houseMarkers=[];
+for (var i = 0; i < for_sale.length; i++) {
+        var house = for_sale[i];
+        houseMarker=L.marker(house.location).bindPopup("<h1>" + house.name + "</h1> <hr> <h3>Price " + house.price + "</h3>");
+        houseMarkers.push(houseMarker);      
+};
+console.log(houseMarkers);
+
+function createMap(dinning, houses) {
   // Create the tile layer that will be the background of our map
   var lightmap = L.tileLayer(
     "https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
@@ -16,7 +45,8 @@ function createMap(dinning) {
 
   // Create an overlayMaps object to hold the dinning layer
   var overlayMaps = {
-    "Restaurants": dinning
+    "Restaurants": dinning,
+    "For Sale":houses
   };
 
   // Create the map object with options
@@ -71,10 +101,10 @@ function createMarkers(response) {
 
 
 // Create a layer group made from the bike markers array, pass it into the createMap function
-createMap(L.layerGroup(restMarkers));
+createMap(L.layerGroup(restMarkers),L.layerGroup(houseMarkers));
 }
 
-// Perform an API call to the Citi Bike API to get station information. Call createMarkers when complete
+
 d3.json(
   "../Atlanta_restaurants_geojson/restaurant_point.geojson", createMarkers);
 

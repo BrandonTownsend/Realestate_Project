@@ -25,7 +25,7 @@ for (var i = 0; i < for_sale.length; i++) {
         houseMarker=L.marker(house.location).bindPopup("<h1>" + house.name + "</h1> <hr> <h3>Price " + house.price + "</h3>");
         houseMarkers.push(houseMarker);      
 };
-console.log(houseMarkers);
+// console.log(houseMarkers);
 
 function createMap(dining, houses) {
   // Create the tile layer that will be the background of our map
@@ -76,11 +76,11 @@ var layers = {
     }
   ).addTo(map);
 
-  // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
-  L.control
-    .layers(baseMaps, overlayMaps, {
-      collapsed: false
-    }).addTo(map);
+  // // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
+  // L.control
+  //   .layers(baseMaps, overlayMaps, {
+  //     collapsed: false
+  //   }).addTo(map);
 }
 var icons = {
   dining_icon: L.ExtraMarkers.icon({
@@ -95,21 +95,39 @@ function createMarkers(response) {
 
   var restaurants = response.features;
 
+  L.geoJson(response,{
+    onEachFeature: function(feature, layer){
+      layer.on({
+        click: function (event) {
+          // map = L.map("map-id", {
+          //   center: [33.7756, -84.3963],
+          //   zoom: 12,
+          //   layers: [lightmap, dining, houses]
+          // });
+          console.log(feature)
+
+
+
+        }
+      })
+    }
+
+  }).addTo(map);
   // Initialize an array to hold restaurant markers
   var restMarkers = [];
 
-  // Loop through the stations array
+  // Loop through the restaurants array
   for (var index = 0; index < restaurants.length; index++) {
     var res = restaurants[index];
 
-    //  For each station, create a marker and bind a popup with the station's name
+    //  For each station, create a marker and bind a popup with the restaurant's name
     var newMarker = L.marker([res.geometry.coordinates[1],res.geometry.coordinates[0]],{
       icon: icons.dining_icon
     });
 
       newMarker.bindPopup("<h3>" + res.properties.name + "<h3><h3>Capacity: " + res.properties.cuisine + "</h3>");
 
-    // Add the marker to the bikeMarkers array
+    // Add the marker to the restaurant array
     restMarkers.push(newMarker);
   }
   // console.log(restMarkers);
@@ -119,6 +137,20 @@ function createMarkers(response) {
 createMap(L.layerGroup(restMarkers),L.layerGroup(houseMarkers));
 }
 
+// Use D3 to create an event handler
+
+// d3.selectAll("#map-id").on("click", updatePage);
+
+// function updatePage() {
+//   // Use D3 to select the dropdown menu
+//   var location = d3.selectAll("#map-id");
+//   // Assign the dropdown menu item ID to a variable
+//   // var dropdownMenuID = location.id;
+//   // // Assign the dropdown menu option to a variable
+//   // var selectedOption = dropdownMenu.value;
+
+//   console.log(location);
+// }
 
 d3.json("../Atlanta_restaurants_geojson/restaurant_point.geojson", createMarkers);
 

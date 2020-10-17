@@ -13,10 +13,12 @@ L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
   accessToken: API_KEY
 }).addTo(myMap);
 
-L.marker([33.773, -84.352]).bindPopup("House 01: Virgina Highlands").addTo(myMap);
-L.marker([33.779, -84.380]).bindPopup("House 02: Midtown").addTo(myMap);
-L.marker([33.8402, -84.232]).bindPopup("House 03: Tucker").addTo(myMap);
-L.marker([33.765, -84.354]).bindPopup("House 04: Inman Park").addTo(myMap);
+L.marker([33.773, -84.352]).bindPopup("946 North Highland Ave NE | $939,000 | bd2, ba2").addTo(myMap);
+L.marker([33.779, -84.380]).bindPopup("H218 8th Street NE | $1,450,000 | 2bd, 2ba").addTo(myMap);
+L.marker([33.8402, -84.232]).bindPopup("1950 Walton Woods Circle | $285,000 | bd4, ba2").addTo(myMap);
+L.marker([33.765, -84.354]).bindPopup("407 North Highland Ave NE | $1,169,000 | 4bd, 2ba").addTo(myMap);
+L.marker([33.830, -84.4391]).bindPopup("2740 Margaret Mitchell Dr NW | $1,025,000 | 4bd, 3ba").addTo(myMap);
+
 
 // Load in geojson data
 var geoData = "static/data/AtlantaHousePrices.geojson";
@@ -49,7 +51,7 @@ d3.json(geoData, function(data) {
 
     // Binding a pop-up to each layer
     onEachFeature: function(feature, layer) {
-      layer.bindPopup("Neighborhood: " + feature.properties.Neighbhorhoods + "<br>Median Household Income:<br>" +
+      layer.bindPopup("Neighborhood: " + feature.properties.Neighbhorhoods + "<br>Average House Sale:<br>" +
         "$" + feature.properties.HmSalePerSF_2018);
     }
   }).addTo(myMap);
@@ -63,10 +65,10 @@ d3.json(geoData, function(data) {
     var labels = [];
 
     // Add min & max
-    var legendInfo = "<h1>Median Income</h1>" +
+    var legendInfo = "<h1>Average Sale Price</h1>" +
       "<div class=\"labels\">" +
-        "<div class=\"min\">" + limits[0] + "</div>" +
-        "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+        "<div class=\"min\">" + 107520 + "</div>" +
+        "<div class=\"max\">" + 1893814 + "</div>" +
       "</div>";
 
     div.innerHTML = legendInfo;
